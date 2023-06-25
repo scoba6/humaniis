@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FormuleResource\Pages;
-use App\Filament\Resources\FormuleResource\RelationManagers;
-use App\Models\Formule;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\Formule;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\FormuleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\FormuleResource\RelationManagers;
 
 class FormuleResource extends Resource
 {
@@ -27,7 +30,8 @@ class FormuleResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('libfrm')->required()->label('FORMULE')->columnSpan('full'),
+                Textarea::make('comfrm')->required()->label('DETAILS FORMULE')->columnSpan('full'),
             ]);
     }
 
@@ -35,7 +39,8 @@ class FormuleResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('libfrm')->sortable()->label('FORMULE'),
+                TextColumn::make('comfrm')->sortable()->label('DETAILS'),
             ])
             ->filters([
                 //
@@ -51,7 +56,7 @@ class FormuleResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\OptionsRelationManager::class,
         ];
     }
     

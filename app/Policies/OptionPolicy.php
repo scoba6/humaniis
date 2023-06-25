@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Formule;
+use App\Models\Option;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class FormulePolicy
+class OptionPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class FormulePolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Formule $formule): bool
+    public function view(User $user, Option $option): bool
     {
         return true;
     }
@@ -35,7 +35,7 @@ class FormulePolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Formule $formule): bool
+    public function update(User $user, Option $option): bool
     {
         return true;
     }
@@ -43,7 +43,7 @@ class FormulePolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Formule $formule): bool
+    public function delete(User $user, Option $option): bool
     {
         return false;
     }
@@ -51,7 +51,7 @@ class FormulePolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Formule $formule): bool
+    public function restore(User $user, Option $option): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class FormulePolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Formule $formule): bool
+    public function forceDelete(User $user, Option $option): bool
     {
         return false;
     }

@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('famille_membres', function (Blueprint $table) {
+        Schema::create('formule_options', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('famille_id')->constrained('familles');
-            $table->foreignId('qualite_id')->constrained('qualites');
             $table->foreignId('formule_id')->constrained('formules');
-            $table->foreignId('option_id')->constrained('formules');
-            $table->string('nommem')->default('')->nullable(false);
-            $table->string('matmem')->default('')->nullable(false);
-            $table->date('datnai')->nullable(false);
-            $table->integer('sexmem')->nullable(false);
-            $table->integer('agemem')->nullable(false);
-            $table->string('commem')->default('')->nullable(false); //Commentaire
+            $table->string('libopt')->default('OPTIONS')->nullable(false);
+            $table->integer('agemin')->unsigned()->nullable(false)->default(0);
+            $table->integer('agemax')->unsigned()->nullable(false)->default(0);
+            $table->float('mntxaf')->default(0)->nullable(false);
+            $table->float('mnteur')->default(0)->nullable(false);
+            $table->string('dtlopt')->default('DETAILS')->nullable(false);
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('famille_membres');
+        Schema::dropIfExists('formule_options');
     }
 };

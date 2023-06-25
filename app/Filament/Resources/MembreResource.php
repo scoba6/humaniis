@@ -19,6 +19,7 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\MembreResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MembreResource\RelationManagers;
+use App\Models\Option;
 
 class MembreResource extends Resource
 {
@@ -34,13 +35,14 @@ class MembreResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('fammile_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->searchable()->columnSpan('full'),
-                Select::make('qualite_id')->label('QUALITE')->required()->options(Qualite::all()->pluck('libqlt', 'id')),
-                Select::make('formule_id')->label('FORMULE')->required()->options(Formule::all()->pluck('libfrm', 'id')),
                 TextInput::make('nommem')->required()->label('NOM PRENOM')->columnSpan('full'),
-                TextInput::make('matmem')->required()->label('MATRICULE')->disabled(),
                 DateTimePicker::make('datnai')->label('DATE DE NAISSANCE')->displayFormat('d/m/Y')->maxDate(now())->required(),
                 Select::make('sexmem')->label('SEXE')->required()->options(['1' => 'HOMME', '0' => 'FEMME']),
+                Select::make('fammile_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->searchable(),
+                Select::make('qualite_id')->label('QUALITE')->required()->options(Qualite::all()->pluck('libqlt', 'id')),
+                Select::make('formule_id')->label('FORMULE')->required()->options(Formule::all()->pluck('libfrm', 'id')),
+                Select::make('option_id')->label('OPTION')->required()->options(Option::all()->pluck('libopt', 'id')),
+                TextInput::make('matmem')->required()->label('MATRICULE')->disabled(),
                 TextInput::make('agemem')->required()->label('AGE')->disabled(),
                 Textarea::make('commem')->label('COMMENTAIRES')->columnSpan('full'),
             ]);
@@ -73,7 +75,7 @@ class MembreResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\CotisationsRelationManager::class,
         ];
     }
     

@@ -5,6 +5,7 @@ namespace App\Models;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -13,6 +14,19 @@ class Membre extends Model
     use HasFactory, Userstamps, SoftDeletes;
 
     protected $table = 'famille_membres';
+
+    protected $fillable = [
+        'famille_id',
+        'qualite_id',
+        'formule_id',
+        'nommem',
+        'datnai',
+        'sexmem',
+        'commem',
+        'agemem',
+        'commem'
+
+     ];
 
 
     /**
@@ -43,6 +57,16 @@ class Membre extends Model
     public function formule(): BelongsTo
     {
         return $this->belongsTo(Formule::class);
+    }
+
+    /**
+     * Get all of the cotisations for the Membre
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function cotisations(): HasMany
+    {
+        return $this->hasMany(Cotisation::class);
     }
 
 
