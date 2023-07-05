@@ -19,9 +19,9 @@ class Membre extends Model
         'famille_id',
         'qualite_id',
         'formule_id',
+        'sexmem_id',
         'nommem',
         'datnai',
-        'sexmem',
         'commem',
         'agemem',
         'commem'

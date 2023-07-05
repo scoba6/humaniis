@@ -6,6 +6,7 @@ use Filament\Forms;
 use Filament\Tables;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -31,6 +32,7 @@ class OptionsRelationManager extends RelationManager
                 TextInput::make('agemax')->label('AGE MAX'),
                 TextInput::make('mntxaf')->label('MOTANT XAF'),
                 TextInput::make('mnteur')->label('MOTANT EUR'),
+                Select::make('sexfrm')->label('SEXE')->required()->options(['1' => 'HOMME', '2' => 'FEMME'])->columnSpanFull(),
                 Textarea::make('dtlopt')->label('DETAILS OPTION')->columnSpanFull()
             ]);
     }

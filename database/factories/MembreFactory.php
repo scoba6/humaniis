@@ -17,13 +17,13 @@ class MembreFactory extends Factory
     public function definition(): array
     {
         return [
-            'fammile_id' => fake()->numberBetween(1, 98),
+            'famille_id' => fake()->numberBetween(1, 98),
             'qualite_id' => fake()->numberBetween(1, 3),
             'formule_id' => fake()->numberBetween(1, 2),
+            'sexmem_id'  => fake()->numberBetween(1, 3),
             'nommem' =>     fake()->name(),
             'matmem' =>     fake()->numerify('HUMEM-######'),
             'datnai' =>     fake()->dateTimeBetween(),
-            'sexmem' =>     fake()->numberBetween(1, 2),
             'agemem' =>     fake()->numberBetween(25,70),
             'commem' =>     fake()->sentence(),
         ];

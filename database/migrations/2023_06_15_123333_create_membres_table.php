@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('famille_id')->constrained('familles');
             $table->foreignId('qualite_id')->constrained('qualites');
             $table->foreignId('formule_id')->constrained('formules');
-            $table->foreignId('option_id')->constrained('formules');
+            $table->foreignId('option_id')->constrained('formules')->default(1);
+            $table->foreignId('sexmem_id')->constrained('sexgrp');
             $table->string('nommem')->default('')->nullable(false);
             $table->string('matmem')->default('')->nullable(false);
             $table->date('datnai')->nullable(false);
-            $table->integer('sexmem')->nullable(false);
             $table->integer('agemem')->nullable(false);
             $table->string('commem')->default('')->nullable(false); //Commentaire
             $table->timestamps();

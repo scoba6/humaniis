@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use Closure;
+use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Membre;
+use App\Models\Option;
+use App\Models\SexGrp;
 use App\Models\Famille;
 use App\Models\Formule;
 use App\Models\Qualite;
@@ -12,6 +16,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -19,7 +24,6 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\MembreResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\MembreResource\RelationManagers;
-use App\Models\Option;
 
 class MembreResource extends Resource
 {
@@ -27,7 +31,7 @@ class MembreResource extends Resource
 
     protected ?string $maxContentWidth = 'full';
     protected static ?string $navigationGroup = 'ADHESIONS';
-    protected static ?string $navigationLabel ='Ayant droits';
+    protected static ?string $navigationLabel = 'Ayant droits';
     protected static ?string $navigationIcon = 'heroicon-o-user';
     protected static ?int $navigationSort = 2;
 
@@ -35,15 +39,23 @@ class MembreResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('nommem')->required()->label('NOM PRENOM')->columnSpan('full'),
-                DateTimePicker::make('datnai')->label('DATE DE NAISSANCE')->displayFormat('d/m/Y')->maxDate(now())->required(),
-                Select::make('sexmem')->label('SEXE')->required()->options(['1' => 'HOMME', '0' => 'FEMME']),
-                Select::make('fammile_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->searchable(),
+                Select::make('fammile_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->columnSpan('full')->searchable(),
+                TextInput::make('nommem')->required()->label('NOM PRENOM'), //->columnSpan('full'),
                 Select::make('qualite_id')->label('QUALITE')->required()->options(Qualite::all()->pluck('libqlt', 'id')),
+                DateTimePicker::make('datnai')->label('DATE DE NAISSANCE')->displayFormat('d/m/Y')->maxDate(now())->required()
+                    ->reactive()
+                    ->afterStateUpdated(function (Closure $set, $get) {
+                        $dateOfBirth = $get('datnai');
+                        $age = Carbon::now()->diffInYears($dateOfBirth);
+                        $set('agemem', $age); 
+                    }),
+                TextInput::make('agemem')->label('AGE')->disabled(),
                 Select::make('formule_id')->label('FORMULE')->required()->options(Formule::all()->pluck('libfrm', 'id')),
+                Select::make('sexmem_id')->label('CATEGORIE')->required()->options(SexGrp::all()->pluck('libsxg', 'id')),
                 Select::make('option_id')->label('OPTION')->required()->options(Option::all()->pluck('libopt', 'id')),
-                TextInput::make('matmem')->required()->label('MATRICULE')->disabled(),
-                TextInput::make('agemem')->required()->label('AGE')->disabled(),
+                TextInput::make('matmem')->label('MATRICULE')->disabled(),
+                DateTimePicker::make('valfrm')->label('VALIDITE FORMULE')->displayFormat('d/m/Y')->maxDate(now())->required()->columnSpan('full'),
+                Checkbox::make('Frais adhésion')->required(),
                 Textarea::make('commem')->label('COMMENTAIRES')->columnSpan('full'),
             ]);
     }
@@ -59,7 +71,7 @@ class MembreResource extends Resource
                 Tables\Columns\TextColumn::make('matmem')->sortable()->label('MATRICULE'),
                 Tables\Columns\TextColumn::make('datnai')->sortable()->label('DATE DE NAISSANCE')->datetime('d/m/Y'),
                 Tables\Columns\TextColumn::make('agemem')->sortable()->label('AGE'),
-                Tables\Columns\TextColumn::make('sexmem')->sortable()->label('SEXE'),
+                Tables\Columns\TextColumn::make('sexmem_id')->sortable()->label('SEXE'),
             ])
             ->filters([
                 //
@@ -71,14 +83,14 @@ class MembreResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getRelations(): array
     {
         return [
             RelationManagers\CotisationsRelationManager::class,
         ];
     }
-    
+
     public static function getPages(): array
     {
         return [
@@ -86,5 +98,5 @@ class MembreResource extends Resource
             'create' => Pages\CreateMembre::route('/create'),
             'edit' => Pages\EditMembre::route('/{record}/edit'),
         ];
-    }    
+    }
 }
