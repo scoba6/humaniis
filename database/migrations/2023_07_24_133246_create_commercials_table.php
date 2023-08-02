@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('familles', function (Blueprint $table) {
+        Schema::create('commercials', function (Blueprint $table) {
             $table->id();
-           // $table->string('matfam')->default('hhh')->nullable(false);
-            $table->string('nomfam')->default('')->nullable(false);
-            $table->string('vilfam')->default('')->nullable(); //Ville
-            $table->string('payfam')->default('')->nullable(); //Pays
-            $table->string('adrfam')->default('')->nullable(); //Adress
-            $table->foreignId('commercial_id')->constrained('commercials')->default(0);
+            $table->string('nomcom', 100)->nullable(false)->default('text');
+            $table->float('taucom')->nullable(false)->default(123.45);
+            $table->string('matcom', 100)->nullable(false)->default('text');
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes();
+            
         });
     }
 
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('familles');
+        Schema::dropIfExists('commercials');
     }
 };

@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('formules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('territo_id')->constrained('territos');
-            $table->string('libfrm')->default('')->nullable(false);
-            $table->string('comfrm')->default('')->nullable(); //Commentaire
+            $table->string('libfrm')->default('text')->nullable(false);
+            $table->string('comfrm')->default('text')->nullable(); //Commentaire
+            $table->boolean('ambfrm')->nullable(false)->default(false); // Ambulatoire
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

@@ -17,9 +17,10 @@ return new class extends Migration
             $table->string('libopt')->default('OPTIONS')->nullable(false);
             $table->integer('agemin')->unsigned()->nullable(false)->default(0);
             $table->integer('agemax')->unsigned()->nullable(false)->default(0);
+            $table->foreignId('sexgrp_id')->constrained('sexgrp')->default(1);
             $table->float('mntxaf')->default(0)->nullable(false);
             $table->float('mnteur')->default(0)->nullable(false);
-            $table->string('dtlopt')->default('DETAILS')->nullable(false);
+            $table->string('dtlopt')->default('DETAILS')->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();

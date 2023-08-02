@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\FormuleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\FormuleResource\RelationManagers;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\IconColumn;
 
 class FormuleResource extends Resource
 {
@@ -32,6 +34,7 @@ class FormuleResource extends Resource
             ->schema([
                 TextInput::make('libfrm')->required()->label('FORMULE')->columnSpan('full'),
                 Textarea::make('comfrm')->required()->label('DETAILS FORMULE')->columnSpan('full'),
+                Toggle::make('ambfrm')->required()->label('AMBULATOIRE')
             ]);
     }
 
@@ -41,6 +44,7 @@ class FormuleResource extends Resource
             ->columns([
                 TextColumn::make('libfrm')->sortable()->label('FORMULE'),
                 TextColumn::make('comfrm')->sortable()->label('DETAILS'),
+                IconColumn::make('ambfrm')->label('AMBULATOIRE')->boolean()
             ])
             ->filters([
                 //

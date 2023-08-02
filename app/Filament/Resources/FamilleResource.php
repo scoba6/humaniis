@@ -2,25 +2,27 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\FamilleResource\Pages;
-use App\Filament\Resources\FamilleResource\RelationManagers;
-use App\Models\Famille;
 use Filament\Forms;
-use Filament\Resources\Form;
-use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use App\Models\Famille;
+use Filament\Resources\Form;
+use Filament\Resources\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\FamilleResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\FamilleResource\RelationManagers;
+use App\Models\Commercial;
 
 class FamilleResource extends Resource
 {
     protected static ?string $model = Famille::class;
 
- 
+
     protected ?string $maxContentWidth = 'full';
     protected static ?string $navigationGroup = 'ADHESIONS';
-    protected static ?string $navigationLabel ='Familles';
+    protected static ?string $navigationLabel = 'Familles';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?int $navigationSort = 1;
     protected static ?string $recordTitleAttribute = 'nomfam';
@@ -30,10 +32,10 @@ class FamilleResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nomfam')->required()->label('NOM DE FAMILLE')->columnSpan('full'),
-                Forms\Components\TextInput::make('matfam')->required()->label('MATRICULE FAMILLE')->prefix('HUMFAM-'),
-                Forms\Components\TextInput::make('adrfam')->required()->label('ADRESSE'),
                 Forms\Components\TextInput::make('vilfam')->required()->label('VILLE'),
                 Forms\Components\TextInput::make('payfam')->required()->label('PAYS'),
+                Forms\Components\Textarea::make('adrfam')->required()->label('ADRESSE (TEL - MAIL)')->columnSpan('full'),
+                Select::make('commercial_id')->label('COMMERCIAL')->required()->options(Commercial::all()->pluck('nomcom', 'id'))->columnSpan('full')->searchable(),
             ]);
     }
 
@@ -42,10 +44,10 @@ class FamilleResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nomfam')->label('NOM DE FAMILLE')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('matfam')->label('MATRICULE FAMILLE')->sortable(),
                 Tables\Columns\TextColumn::make('adrfam')->label('ADRESSE')->sortable(),
                 Tables\Columns\TextColumn::make('vilfam')->label('VILLE')->sortable(),
                 Tables\Columns\TextColumn::make('payfam')->label('PAYS')->sortable(),
+                Tables\Columns\TextColumn::make('commercial.nomcom')->label('COMMERCIAL')->sortable(),
             ])
             ->filters([
                 //
@@ -58,11 +60,11 @@ class FamilleResource extends Resource
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-    
+
     public static function getPages(): array
     {
         return [
             'index' => Pages\ManageFamilles::route('/'),
         ];
-    }    
+    }
 }

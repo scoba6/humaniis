@@ -25,8 +25,9 @@ class CotisationsRelationManager extends RelationManager
                 Forms\Components\TextInput::make('mntcot')
                     ->required()
                     ->maxLength(255)
-                    ->label('MONTANT'),
+                    ->label('MONTANT')->columnSpan('full'),
                 DateTimePicker::make('datcot')->label('DATE DE COTISATION')->displayFormat('d/m/Y')->maxDate(now())->required(),
+                DateTimePicker::make('datval')->label('DATE DE VALIDITE')->displayFormat('d/m/Y')->required(),
                 Textarea::make('detcot')->label('COMMENTAIRES')->columnSpan('full'),
             ]);
     }
@@ -36,6 +37,7 @@ class CotisationsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('datcot')->sortable()->label('DATE')->dateTime('d/m/Y'),
+                Tables\Columns\TextColumn::make('datval')->sortable()->label('VALIDITE')->dateTime('d/m/Y'),
                 Tables\Columns\TextColumn::make('mntcot')->label('MONTANT')->money('XAF'),
                 Tables\Columns\TextColumn::make('detcot')->label('OBSERVATIONS'),
             ])

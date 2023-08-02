@@ -16,13 +16,13 @@ return new class extends Migration
             $table->foreignId('membre_id')->constrained('famille_membres');
             $table->float('mntcot')->nullable(false)->default(123.45);
             $table->date('datcot')->nullable(false)->default(now());
+            $table->date('datval')->nullable()->default(now());
             $table->string('detcot', 100)->nullable()->default('text');
             $table->timestamps();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
             $table->softDeletes();
-            
         });
     }
 

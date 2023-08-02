@@ -15,11 +15,14 @@ use App\Models\Qualite;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Resources\Resource;
+use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\MembreResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -39,23 +42,58 @@ class MembreResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('fammile_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->columnSpan('full')->searchable(),
+                Select::make('famille_id')->label('FAMILLE')->required()->options(Famille::all()->pluck('nomfam', 'id'))->columnSpan('full')->searchable(),
                 TextInput::make('nommem')->required()->label('NOM PRENOM'), //->columnSpan('full'),
                 Select::make('qualite_id')->label('QUALITE')->required()->options(Qualite::all()->pluck('libqlt', 'id')),
                 DateTimePicker::make('datnai')->label('DATE DE NAISSANCE')->displayFormat('d/m/Y')->maxDate(now())->required()
                     ->reactive()
+                    ->required()
                     ->afterStateUpdated(function (Closure $set, $get) {
                         $dateOfBirth = $get('datnai');
                         $age = Carbon::now()->diffInYears($dateOfBirth);
-                        $set('agemem', $age); 
+                        $set('agemem', $age);
                     }),
                 TextInput::make('agemem')->label('AGE')->disabled(),
-                Select::make('formule_id')->label('FORMULE')->required()->options(Formule::all()->pluck('libfrm', 'id')),
-                Select::make('sexmem_id')->label('CATEGORIE')->required()->options(SexGrp::all()->pluck('libsxg', 'id')),
-                Select::make('option_id')->label('OPTION')->required()->options(Option::all()->pluck('libopt', 'id')),
+
+                Select::make('formule_id')
+                    ->label('FORMULE')
+                    ->options(Formule::all()->pluck('libfrm', 'id'))
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('option_id', null)),
+                Select::make('sexmem_id')
+                    ->label('CATEGORIE')
+                    ->options(SexGrp::all()->pluck('libsxg', 'id'))
+                    ->required()
+                    ->reactive()
+                    ->afterStateUpdated(fn (callable $set) => $set('option_id', null)),
+
+
+                //Dependant select
+                Select::make('option_id')
+                    ->label('Option')
+                    ->required()
+                    ->options(function (Closure $get) {
+                        $frm = Formule::find($get('formule_id'))?->id; //Formule
+                        $grp = SexGrp::find($get('sexmem_id'))?->id; // Categorie
+                        $age = $get('agemem');
+
+                        if (!$frm) {
+                            return Option::all()->pluck('libopt', 'id');
+                        }
+                        return Option::query()
+                            ->where('formule_id', $frm)
+                            ->where('sexgrp_id', $grp)
+                            ->where('agemin', '<=' , $age)
+                            ->pluck('libopt', 'id',);
+                    }),
+
                 TextInput::make('matmem')->label('MATRICULE')->disabled(),
                 DateTimePicker::make('valfrm')->label('VALIDITE FORMULE')->displayFormat('d/m/Y')->maxDate(now())->required()->columnSpan('full'),
-                Checkbox::make('Frais adhésion')->required(),
+                Checkbox::make('Frais adhésion'),
+                Toggle::make('')->inline()->onColor('success')->offColor('danger')->required()->label('Frais adhésion'),
+                Toggle::make('ambfrm')->inline()->onColor('success')->offColor('danger')->required()->label('RACHAT OPTIQUE'),
+                Toggle::make('ambfrm')->inline()->onColor('success')->offColor('danger')->required()->label('RACHAT DENTISTERIE'),
                 Textarea::make('commem')->label('COMMENTAIRES')->columnSpan('full'),
             ]);
     }

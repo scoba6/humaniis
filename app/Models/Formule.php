@@ -13,10 +13,12 @@ class Formule extends Model
     use HasFactory, SoftDeletes, Userstamps;
 
     protected $fillable = [
-        'territo_id',
+        //'territo_id',
         'libfrm',
-        'comfrm'
-     ];
+        'comfrm',
+        'ambfrm'
+
+    ];
 
     /**
      * Get all of the 
@@ -28,4 +30,6 @@ class Formule extends Model
     {
         return $this->hasMany(Option::class);
     }
+
+    
 }

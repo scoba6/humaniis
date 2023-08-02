@@ -4,6 +4,7 @@ namespace App\Filament\Resources\FormuleResource\RelationManagers;
 
 use Filament\Forms;
 use Filament\Tables;
+use App\Models\SexGrp;
 use Filament\Resources\Form;
 use Filament\Resources\Table;
 use Filament\Forms\Components\Select;
@@ -24,6 +25,7 @@ class OptionsRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Select::make('sexgrp_id')->label('CATEGORIE')->required()->options(SexGrp::all()->pluck('libsxg', 'id'))->columnSpanFull(),
                 Forms\Components\TextInput::make('libopt')->label('LIBELLE')
                     ->required()
                     ->maxLength(255)
@@ -32,7 +34,26 @@ class OptionsRelationManager extends RelationManager
                 TextInput::make('agemax')->label('AGE MAX'),
                 TextInput::make('mntxaf')->label('MOTANT XAF'),
                 TextInput::make('mnteur')->label('MOTANT EUR'),
-                Select::make('sexfrm')->label('SEXE')->required()->options(['1' => 'HOMME', '2' => 'FEMME'])->columnSpanFull(),
+
+                Forms\Components\Section::make('RACHAT OPTIQUE')
+                ->schema([
+                    TextInput::make('mntopx')->label('MOTANT XAF'),
+                    TextInput::make('mntope')->label('MOTANT EUR'),
+         
+                ])->collapsible()
+                  ->collapsed()
+                  ->columns(2),
+                
+                Forms\Components\Section::make('RACHAT DENTISTERIE')
+                  ->schema([
+                    TextInput::make('mntdnx')->label('MOTANT XAF'),
+                    TextInput::make('mntdne')->label('MOTANT EUR'),
+
+                  ])->collapsible()
+                    ->collapsed()
+                    ->columns(2),
+
+                
                 Textarea::make('dtlopt')->label('DETAILS OPTION')->columnSpanFull()
             ]);
     }
@@ -42,11 +63,17 @@ class OptionsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('libopt')->label('LIBELLE'),
-                TextColumn::make('agemin')->label('AGE MIN'),
-                TextColumn::make('agemax')->label('AGE MAX'),
+                TextColumn::make('agemin')->label('AGE MIN')->sortable(),
+                TextColumn::make('agemax')->label('AGE MAX')->sortable(),
+                TextColumn::make('sexgrp.libsxg')->label('CATEGORIE')->sortable(),
+
                 TextColumn::make('mntxaf')->label('MOTANT XAF')->money('XAF'),
-                TextColumn::make('mnteur')->label('MOTANT EUR')->money('EUR'),
-               // TextColumn::make('dtlopt')->label('DETAILS OPTION')->columnSpanFull()
+                TextColumn::make('mnteur')->label('MOTANT EUR')->money('eur'),
+
+                TextColumn::make('mntopx')->label('RACHAT OPT.')->money('XAF'),
+                TextColumn::make('mntdnx')->label('RACHAT DEN.')->money('XAF'),
+
+                // TextColumn::make('dtlopt')->label('DETAILS OPTION')->columnSpanFull()
             ])
             ->filters([
                 //
@@ -61,5 +88,5 @@ class OptionsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }    
+    }
 }

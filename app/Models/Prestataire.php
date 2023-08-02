@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Cotisation extends Model
+class Prestataire extends Model
 {
-    use HasFactory, SoftDeletes, Userstamps;
-
-    protected $table = 'cotisations';
+    use HasFactory, Userstamps, SoftDeletes;
+    protected $table = 'prestataires';
 
     protected $fillable = [
-        'mntcot',
-        'membre_id',
-        'datcot',
-        'datval',
-        'detcot'
-    ];
+        'rsopre',
+        'adrpre',
+        'telpre',
+        'maipre',
+        'natpre'
+    
+     ];
 }

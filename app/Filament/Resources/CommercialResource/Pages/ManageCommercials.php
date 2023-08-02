@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Filament\Resources\CommercialResource\Pages;
+
+use App\Filament\Resources\CommercialResource;
+use Filament\Pages\Actions;
+use Filament\Resources\Pages\ManageRecords;
+
+class ManageCommercials extends ManageRecords
+{
+    protected static string $resource = CommercialResource::class;
+
+    protected function getActions(): array
+    {
+        return [
+            Actions\CreateAction::make(),
+        ];
+    }
+}
