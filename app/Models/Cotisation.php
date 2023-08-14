@@ -16,10 +16,14 @@ class Cotisation extends Model
 
     protected $fillable = [
         'mntcot',
+        'mnttps',
+        'mntcss',
+        'mntadh',
+        'mntttc',
         'membre_id',
         'datcot',
         'datval',
-        'detcot'
+
     ];
 
 

@@ -14,7 +14,11 @@ return new class extends Migration
         Schema::create('cotisations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('membre_id')->constrained('famille_membres');
-            $table->float('mntcot')->nullable(false)->default(123.45);
+            $table->integer('mntcot')->unsigned()->nullable(false)->default(12);
+            $table->integer('mnttps')->unsigned()->nullable(false)->default(12);
+            $table->integer('mntcss')->unsigned()->nullable(false)->default(12);
+            $table->integer('mntadh')->unsigned()->nullable(false)->default(12);
+            $table->integer('mntttc')->unsigned()->nullable(false)->default(12);
             $table->date('datcot')->nullable(false)->default(now());
             $table->date('datval')->nullable()->default(now());
             $table->string('detcot', 100)->nullable()->default('text');
