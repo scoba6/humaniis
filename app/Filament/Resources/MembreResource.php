@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Checkbox;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
@@ -84,16 +85,20 @@ class MembreResource extends Resource
                         return Option::query()
                             ->where('formule_id', $frm)
                             ->where('sexgrp_id', $grp)
-                            ->where('agemin', '<=' , $age)
+                            ->where('agemin', '<=', $age)
+                            ->where('agemax', '>=', $age)
                             ->pluck('libopt', 'id',);
                     }),
 
                 TextInput::make('matmem')->label('MATRICULE')->disabled(),
                 DateTimePicker::make('valfrm')->label('VALIDITE FORMULE')->displayFormat('d/m/Y')->maxDate(now())->required()->columnSpan('full'),
-                Checkbox::make('Frais adhésion'),
-                Toggle::make('')->inline()->onColor('success')->offColor('danger')->required()->label('Frais adhésion'),
-                Toggle::make('ambfrm')->inline()->onColor('success')->offColor('danger')->required()->label('RACHAT OPTIQUE'),
-                Toggle::make('ambfrm')->inline()->onColor('success')->offColor('danger')->required()->label('RACHAT DENTISTERIE'),
+                Fieldset::make('OPTIONS')
+                    ->schema([
+                        Toggle::make('framem')->inline()->onColor('success')->offColor('danger')->label('FRAIS ADHESION'),
+                        Toggle::make('optmem')->inline()->onColor('success')->offColor('danger')->label('RACHAT OPTIQUE'),
+                        Toggle::make('denmem')->inline()->onColor('success')->offColor('danger')->label('RACHAT DENTISTERIE'),
+                    ])
+                    ->columns(3),
                 Textarea::make('commem')->label('COMMENTAIRES')->columnSpan('full'),
             ]);
     }

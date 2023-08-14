@@ -27,6 +27,9 @@ class Membre extends Model
         'commem',
         'agemem',
         'valfrm',
+        'framem',
+        'optmem',
+        'denmem',
         'commem'
     ];
 

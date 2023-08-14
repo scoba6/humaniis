@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Wildside\Userstamps\Userstamps;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Cotisation extends Model
 {
@@ -20,4 +21,15 @@ class Cotisation extends Model
         'datval',
         'detcot'
     ];
+
+
+    /**
+     * Get the membre that owns the Cotisation
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function membre(): BelongsTo
+    {
+        return $this->belongsTo(Membre::class);
+    }
 }
