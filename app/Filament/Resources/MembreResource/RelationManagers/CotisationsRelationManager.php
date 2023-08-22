@@ -9,8 +9,8 @@ use App\Models\Membre;
 use App\Models\Option;
 use Livewire\Livewire;
 use App\Models\Humpargen;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Textarea;
@@ -28,7 +28,7 @@ class CotisationsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'mntcot';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -36,7 +36,7 @@ class CotisationsRelationManager extends RelationManager
                 DateTimePicker::make('datval')->label('DATE DE VALIDITE')->displayFormat('d/m/Y')
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(function (RelationManager $livewire, Closure $set) {
+                    ->afterStateUpdated(function (RelationManager $livewire, \Filament\Forms\Set $set) {
                         $mem = $livewire->ownerRecord->id; //Membre
                         $opt = $livewire->ownerRecord->option_id; //Option
                         $coti = Option::find($opt)?->mntxaf; //Montant de la coti
@@ -91,7 +91,7 @@ class CotisationsRelationManager extends RelationManager
             ]);
     }
 
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

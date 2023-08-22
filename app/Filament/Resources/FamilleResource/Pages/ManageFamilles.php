@@ -10,7 +10,7 @@ class ManageFamilles extends ManageRecords
 {
     protected static string $resource = FamilleResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

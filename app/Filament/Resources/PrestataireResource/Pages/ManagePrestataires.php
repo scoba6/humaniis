@@ -10,7 +10,7 @@ class ManagePrestataires extends ManageRecords
 {
     protected static string $resource = PrestataireResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

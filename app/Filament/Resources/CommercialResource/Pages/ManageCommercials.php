@@ -10,7 +10,7 @@ class ManageCommercials extends ManageRecords
 {
     protected static string $resource = CommercialResource::class;
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),

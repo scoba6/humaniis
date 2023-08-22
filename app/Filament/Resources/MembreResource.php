@@ -12,8 +12,8 @@ use App\Models\SexGrp;
 use App\Models\Famille;
 use App\Models\Formule;
 use App\Models\Qualite;
-use Filament\Resources\Form;
-use Filament\Resources\Table;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\DB;
 use Filament\Forms\Components\Select;
@@ -49,7 +49,7 @@ class MembreResource extends Resource
                 DateTimePicker::make('datnai')->label('DATE DE NAISSANCE')->displayFormat('d/m/Y')->maxDate(now())->required()
                     ->reactive()
                     ->required()
-                    ->afterStateUpdated(function (Closure $set, $get) {
+                    ->afterStateUpdated(function (\Filament\Forms\Set $set, $get) {
                         $dateOfBirth = $get('datnai');
                         $age = Carbon::now()->diffInYears($dateOfBirth);
                         $set('agemem', $age);
@@ -74,7 +74,7 @@ class MembreResource extends Resource
                 Select::make('option_id')
                     ->label('Option')
                     ->required()
-                    ->options(function (Closure $get) {
+                    ->options(function (\Filament\Forms\Get $get) {
                         $frm = Formule::find($get('formule_id'))?->id; //Formule
                         $grp = SexGrp::find($get('sexmem_id'))?->id; // Categorie
                         $age = $get('agemem');
